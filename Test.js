@@ -59,4 +59,53 @@ function Student(name, yearOfBirth) {
         .then(k => console.info(k)); // In ra kết quả cuối cùng (14)
     
     console.info("Đồng bộ 2");
+
+// Promise all / race
+const promise1 = new Promise((resolve, reject) => {
+    setTimeout(() => resolve("Promise 1 resolved!"), 3000);
+});
+
+const promise2 = new Promise((resolve, reject) => {
+    setTimeout(() => resolve("Promise 2 resolved!"), 2000);
+});
+
+const promise3 = new Promise((resolve, reject) => {
+    setTimeout(() => reject("Promise 3 rejected!"), 1000);
+});
+
+Promise.race([promise1, promise2, promise3])
+    .then(result => console.info("Race result:", result))
+    .catch(error => console.info("Race error:", error));
+
+
+//async await -> (Bất đồng bộ nhưng chạy đồng bộ)
+
+const fetchData = (url, delay) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            if (url) {
+                resolve(`Fetched data from ${url}`);
+            } else {
+                reject("No URL provided!");
+            }
+        }, delay);
+    });
+};
+
+const main = async () => {
+    try {
+        const data1 = await fetchData("https://api.example.com/1", 1000);
+        console.log(data1);
+        
+        const data2 = await fetchData("https://api.example.com/2", 2000);
+        console.log(data2);
+        
+        const data3 = await fetchData("https://api.example.com/3", 1500);
+        console.log(data3);
+    } catch (error) {
+        console.error("Error occurred:", error);
+    }
+};
+
+main();
     
